@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroAI Interactive Flashcards | Exercises & Solutions</title>
+    <meta name="description" content="Master NeuroAI exercises and solutions with interactive flashcards featuring full LaTeX and Markdown support.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX CSS & JS for fast, crisp LaTeX rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@14.1.2/lib/marked.umd.js"></script>
+    
+    <!-- App CSS -->
+    <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand-badge">
+                    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a10 10 0 0 1 10 10c0 4.418-2.865 8.167-6.839 9.49"></path>
+                        <path d="M12 22A10 10 0 0 1 2 12C2 7.582 4.865 3.833 8.839 2.51"></path>
+                        <path d="M12 6v6l4 2"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span>NeuroAI</span>
+                </div>
+                <div class="title-group">
+                    <h1>Exercises &amp; Solutions Deck</h1>
+                    <span class="subtitle">Interactive LaTeX Study Suite</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="deck-stats-pill" id="deck-stats">
+                    <span class="stat-item" title="Mastered Cards"><span class="stat-dot dot-mastered"></span> <strong id="stat-mastered-count">0</strong> Mastered</span>
+                    <span class="stat-divider">/</span>
+                    <span class="stat-item" title="Starred Cards"><span class="stat-dot dot-starred"></span> <strong id="stat-starred-count">0</strong> Starred</span>
+                    <span class="stat-divider">/</span>
+                    <span class="stat-item" title="Total Available Cards"><strong id="stat-total-count">45</strong> Total</span>
+                </div>
+                
+                <div class="header-actions">
+                    <!-- Import Progress -->
+                    <button id="btn-import-progress" class="icon-text-btn" title="Import progress from CSV/JSON/TXT file" aria-label="Import Progress">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span>Import</span>
+                    </button>
+                    <input type="file" id="import-file-input" accept=".csv,.json,.txt" style="display: none;">
+
+                    <!-- Export Progress Dropdown -->
+                    <div class="dropdown-wrap" id="export-dropdown-wrap">
+                        <button id="btn-export-toggle" class="icon-text-btn" title="Export progress to file" aria-label="Export Progress">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <span>Export</span>
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="dropdown-menu" id="export-menu" style="display: none;">
+                            <button class="dropdown-item" id="btn-export-csv" type="button">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                <span>Export CSV (.csv)</span>
+                            </button>
+                            <button class="dropdown-item" id="btn-export-json" type="button">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                <span>Export JSON (.json)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Grid Overview -->
+                    <button id="btn-open-grid" class="icon-text-btn" title="Open All Exercises Grid (G)" aria-label="Open Grid Overview">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        <span>Card Grid</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters & Toolbar -->
+        <section class="toolbar-section">
+            <div class="toolbar-row">
+                <div class="chapter-select-wrap">
+                    <label for="chapter-filter" class="visually-hidden">Filter by Chapter</label>
+                    <select id="chapter-filter" class="custom-select">
+                        <option value="all">📚 All Chapters (1 – 15)</option>
+                        <!-- Dynamic options injected by JS -->
+                    </select>
+                </div>
+
+                <div class="search-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-input" placeholder="Search exercises, formulas, concepts..." autocomplete="off">
+                    <button id="btn-clear-search" class="clear-search-btn" title="Clear Search" style="display: none;">&times;</button>
+                </div>
+            </div>
+
+            <div class="filter-pills-row">
+                <div class="filter-pills">
+                    <button class="pill active" data-filter="all" id="filter-all">All <span class="pill-count" id="count-all">45</span></button>
+                    <button class="pill" data-filter="unmastered" id="filter-unmastered">🎯 Unmastered <span class="pill-count" id="count-unmastered">45</span></button>
+                    <button class="pill" data-filter="unseen" id="filter-unseen">⚪ Unseen <span class="pill-count" id="count-unseen">45</span></button>
+                    <button class="pill" data-filter="starred" id="filter-starred">⭐ Starred <span class="pill-count" id="count-starred">0</span></button>
+                    <button class="pill" data-filter="review" id="filter-review">🔄 Needs Review <span class="pill-count" id="count-review">0</span></button>
+                    <button class="pill" data-filter="mastered" id="filter-mastered">✅ Mastered <span class="pill-count" id="count-mastered">0</span></button>
+                </div>
+
+                <div class="deck-actions">
+                    <button id="btn-shuffle" class="btn-sm-action" title="Shuffle Cards (S)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                        <span>Shuffle</span>
+                    </button>
+                    <button id="btn-reset-order" class="btn-sm-action" title="Reset Deck Order" style="display: none;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                        <span>Ordered</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Card Section -->
+        <main class="flashcard-stage">
+            <!-- Progress indicator bar -->
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="deck-progress-bar" style="width: 2%;"></div>
+            </div>
+
+            <!-- Active Deck Status / Counter -->
+            <div class="deck-status-bar">
+                <span class="active-counter" id="active-card-counter">Exercise 1 of 45</span>
+                <span class="keyboard-hint">Tip: Space or Click card to flip &bull; &larr; / &rarr; to navigate</span>
+            </div>
+
+            <!-- Flashcard 3D Scene -->
+            <div class="flashcard-container" id="flashcard-container">
+                <div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flashcard. Click or press space to flip.">
+                    
+                    <!-- FRONT: QUESTION -->
+                    <div class="flashcard-face flashcard-front">
+                        <div class="card-top-bar">
+                            <div class="badge-group">
+                                <span class="badge chapter-pill" id="front-chapter-badge">Chapter 1</span>
+                                <span class="badge exercise-pill" id="front-ex-badge">Exercise 1.1</span>
+                                <span class="badge status-pill" id="front-status-badge">Unseen</span>
+                            </div>
+                            <div class="card-tools">
+                                <button class="tool-btn btn-star" id="btn-star-front" title="Star this exercise (B)" aria-label="Star exercise">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                </button>
+                                <button class="tool-btn" id="btn-copy-front" title="Copy Question Markdown" aria-label="Copy question">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body-scroll markdown-body" id="question-content">
+                            <!-- Question content rendered here -->
+                        </div>
+
+                        <div class="card-bottom-bar">
+                            <span class="flip-prompt">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"></path><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><path d="M7 23l-4-4 4-4"></path><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                                Click or press Space to reveal solution
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- BACK: SOLUTION -->
+                    <div class="flashcard-face flashcard-back">
+                        <div class="card-top-bar">
+                            <div class="badge-group">
+                                <span class="badge chapter-pill" id="back-chapter-badge">Chapter 1</span>
+                                <span class="badge exercise-pill" id="back-ex-badge">Exercise 1.1</span>
+                                <span class="badge solution-tag">Solution</span>
+                            </div>
+                            <div class="card-tools">
+                                <button class="tool-btn btn-star" id="btn-star-back" title="Star this exercise (B)" aria-label="Star exercise">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                </button>
+                                <button class="tool-btn" id="btn-copy-back" title="Copy Solution Markdown" aria-label="Copy solution">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body-scroll markdown-body" id="solution-content">
+                            <!-- Solution content rendered here -->
+                        </div>
+
+                        <div class="card-bottom-bar solution-bottom-bar">
+                            <div class="mastery-grading-group">
+                                <span class="grade-label">Self-Assessment:</span>
+                                <button class="grade-btn btn-grade-review" id="btn-mark-review" title="Mark as Needs Review (1)">
+                                    <span>🔄 Needs Review</span>
+                                </button>
+                                <button class="grade-btn btn-grade-mastered" id="btn-mark-mastered" title="Mark as Mastered (2)">
+                                    <span>✅ Mastered</span>
+                                </button>
+                                <button class="grade-btn btn-grade-unseen" id="btn-mark-unseen" title="Clear tag & Reset to Unseen (0 or U)">
+                                    <span>⚪ Reset to Unseen</span>
+                                </button>
+                            </div>
+                            <span class="flip-prompt">Click to flip back to question</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Floating Navigation Controls -->
+            <div class="navigation-panel">
+                <button id="btn-prev" class="nav-control-btn" title="Previous Card (Left Arrow)">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <span>Previous</span>
+                </button>
+
+                <button id="btn-flip" class="nav-control-btn btn-flip-main" title="Flip Card (Space)">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>Flip Card</span>
+                </button>
+
+                <button id="btn-next" class="nav-control-btn" title="Next Card (Right Arrow)">
+                    <span>Next</span>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+        </main>
+
+        <!-- Card Grid Overview Modal / Drawer -->
+        <div class="grid-modal-overlay" id="grid-modal" style="display: none;">
+            <div class="grid-modal-card">
+                <div class="grid-modal-header">
+                    <div class="modal-title-group">
+                        <h2>All NeuroAI Exercises (45)</h2>
+                        <span class="modal-subtitle">Click any exercise to jump directly</span>
+                    </div>
+                    <button class="modal-close-btn" id="btn-close-grid" title="Close (Esc)">&times;</button>
+                </div>
+                <div class="grid-modal-body" id="grid-cards-container">
+                    <!-- Chapter sections and exercise cards injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast notification -->
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </div>
+
+    <!-- Load Data and Application Scripts in exact order -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
